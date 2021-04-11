@@ -1,10 +1,13 @@
 package com.ds.list;
 
+import java.util.HashSet;
+
 import com.ds.list.ref.Node;
 
 public class LinkedList<E> {
 
 	Node<E> head;
+	int frequency = 0;
 
 	public void pushToStart(E element) {
 		Node<E> new_node = new Node<>(element);
@@ -30,17 +33,18 @@ public class LinkedList<E> {
 		tmp.next = new_node;
 	}
 
-	public void appendLast(E element) {
+	public Node<E> appendLast(E element) {
 		Node<E> new_node = new Node<>(element);
 		if (this.head == null) {
 			this.head = new_node;
-			return;
+			return new_node;
 		}
 		Node<E> tmp = this.head;
 		while (tmp.next != null) {
 			tmp = tmp.next;
 		}
 		tmp.next = new_node;
+		return new_node;
 	}
 
 	public boolean delete(E del_key) {
@@ -164,8 +168,8 @@ public class LinkedList<E> {
 		if (pos - 1 == 0)
 			return head.data;
 
-		Node<E> tmp = this.head.next;
-		int curr = 1;
+		Node<E> tmp = this.head;
+		int curr = 0;
 		while (tmp != null && curr != pos - 1) {
 			curr++;
 			tmp = tmp.next;
@@ -209,31 +213,115 @@ public class LinkedList<E> {
 		}
 	}
 
+	public E getMid_BruteForce() {
+		int mid_pos = this.size() / 2;
+		return getNthNode(mid_pos + 1);
+	}
+
+	public E getMid_2ptr() {
+		if (this.head == null) {
+			System.out.println("List is empty");
+			return null;
+		}
+		Node<E> fast = this.head;
+		Node<E> slow = this.head;
+		while (fast != null && fast.next != null) {
+			fast = fast.next.next;
+			slow = slow.next;
+		}
+		return slow.data;
+	}
+
+	public int count_occurences(E key) {
+		if (this.head == null)
+			return 0;
+		int count = 0;
+		Node<E> tmp = this.head;
+		while (tmp != null) {
+			if (tmp.data == key)
+				count++;
+			tmp = tmp.next;
+		}
+		return count;
+	}
+
+	public int count_occurences_recursive(E key) {
+		frequency = 0;
+		return count_occurences_recursive(head, key);
+	}
+
+	private int count_occurences_recursive(Node<E> head, E key) {
+		if (head == null)
+			return frequency;
+		if (head.data == key)
+			frequency += 1;
+		return count_occurences_recursive(head.next, key);
+	}
+
+	public boolean detect_loop_using_hashing() {
+		HashSet<Node<E>> mem = new HashSet<>();
+		Node<E> tmp = this.head;
+		while (tmp != null) {
+			if (mem.contains(tmp))
+				return true;
+			mem.add(tmp);
+			tmp = tmp.next;
+		}
+		return false;
+	}
+
+	// Floyd's Cycle-Finding Algorithm
+	public boolean detect_loop_fastest() {
+		if (this.head == null) {
+			System.out.println("List is empty");
+			return false;
+		}
+		Node<E> fast = this.head;
+		Node<E> slow = this.head;
+
+		while (slow != null && fast != null && fast.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+			if (fast == slow)
+				return true;
+		}
+		return false;
+	}
+
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		list.head = new Node<>(1);
 		list.head.next = new Node<>(2);
 		list.head.next.next = new Node<>(3);
 		list.traverse();
-		list.pushToStart(4);
+		list.pushToStart(1);
 		list.insertAfter(2, 5);
 		list.insertAfter(6, 9);
-		list.appendLast(6);
-		list.traverse();
-		list.delete(1);
-		list.delete(7);
-		list.deleteAtPos(2);
-		list.deleteAtPos(9);
-		list.traverse();
-		System.out.println(list.size());
-		System.out.println(list.size_via_recursive(list.head));
-		System.out.println(list.search(2));
-		System.out.println(list.search(8));
-		System.out.println(list.search_via_recursion(8));
-		System.out.println(list.search_via_recursion(2));
-		list.traverse();
-		System.out.println(list.getNthNode(1));
-		System.out.println(list.getNthNodeFrmLast(2));
-		System.out.println(list.getNthNodeFrmLast2PtrApproach(4));
+		Node<Integer> lastNode = list.appendLast(1);
+		// testing cyclic list
+		// lastNode.next = list.head.next;
+		// list.traverse();
+		// commenting below statements for better respective output results
+		// list.delete(1);
+		// list.delete(7);
+		// list.deleteAtPos(2);
+		// list.deleteAtPos(9);
+		// list.traverse();
+		// System.out.println(list.size());
+		// System.out.println(list.size_via_recursive(list.head));
+		// System.out.println(list.search(2));
+		// System.out.println(list.search(8));
+		// System.out.println(list.search_via_recursion(8));
+		// System.out.println(list.search_via_recursion(2));
+		// list.traverse();
+		// System.out.println(list.getNthNode(2));
+		// System.out.println(list.getNthNodeFrmLast(4));
+		// System.out.println(list.getNthNodeFrmLast2PtrApproach(2));
+		// System.out.println(list.getMid_BruteForce());
+		// System.out.println(list.getMid_2ptr());
+		// System.out.println(list.count_occurences(1));
+		// System.out.println(list.count_occurences_recursive(1));
+		// System.out.println(list.detect_loop_using_hashing());
+		// System.out.println(list.detect_loop_fastest());
 	}
 }
