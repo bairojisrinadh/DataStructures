@@ -288,6 +288,35 @@ public class LinkedList<E> {
 		return false;
 	}
 
+	public int detect_and_count_loop() {
+		if (this.head == null) {
+			System.out.println("List is empty");
+			return 0;
+		}
+		Node<E> fast = this.head;
+		Node<E> slow = this.head;
+
+		Node<E> loop_ref = null;
+		while (slow != null && fast != null && fast.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+			if (fast == slow) {
+				loop_ref = fast;
+				break;
+			}
+		}
+
+		int count = 0;
+		if (loop_ref != null) {
+			count = 1;
+			while (fast.next != loop_ref) {
+				count++;
+				fast = fast.next;
+			}
+		}
+		return count;
+	}
+
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		list.head = new Node<>(1);
@@ -297,7 +326,8 @@ public class LinkedList<E> {
 		list.pushToStart(1);
 		list.insertAfter(2, 5);
 		list.insertAfter(6, 9);
-		Node<Integer> lastNode = list.appendLast(1);
+		Node<Integer> lastNode = list.appendLast(9);
+		list.traverse();
 		// testing cyclic list
 		// lastNode.next = list.head.next;
 		// list.traverse();
@@ -323,5 +353,6 @@ public class LinkedList<E> {
 		// System.out.println(list.count_occurences_recursive(1));
 		// System.out.println(list.detect_loop_using_hashing());
 		// System.out.println(list.detect_loop_fastest());
+		// System.out.println(list.detect_and_count_loop());
 	}
 }
