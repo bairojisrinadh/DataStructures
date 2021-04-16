@@ -1,12 +1,14 @@
 package com.ds.list;
 
 import java.util.HashSet;
+import java.util.Stack;
 
 import com.ds.list.ref.Node;
 
 public class LinkedList<E> {
 
 	Node<E> head;
+	Node<E> left;
 	int frequency = 0;
 
 	public void pushToStart(E element) {
@@ -99,7 +101,7 @@ public class LinkedList<E> {
 		return true;
 	}
 
-	public void traverse() {
+	public String traverse() {
 		if (this.head == null) {
 			System.out.println("given linked list is empty");
 		}
@@ -113,7 +115,7 @@ public class LinkedList<E> {
 				sb.append(tmp.data);
 			tmp = tmp.next;
 		}
-		System.out.println(sb.toString());
+		return sb.toString();
 	}
 
 	public int size() {
@@ -317,33 +319,142 @@ public class LinkedList<E> {
 		return count;
 	}
 
+	public boolean is_palindrome() { // Time: O(n), Space: O(n)
+		if (this.head == null) {
+			System.out.println("List is empty");
+			return false;
+		}
+
+		Stack<E> cache = new Stack<>();
+
+		// push all the elements to stack
+		Node<E> tmp = this.head;
+		while (tmp != null) {
+			cache.push(tmp.data);
+			tmp = tmp.next;
+		}
+
+		tmp = this.head;
+		while (tmp != null) {
+			E ele = cache.pop();
+			if (tmp.data != ele) {
+				return false;
+			}
+			tmp = tmp.next;
+		}
+		return true;
+	}
+
+	public boolean is_palindrome_without_add_space() {
+		Node<E> fast = this.head;
+		Node<E> slow = this.head;
+		Node<E> prev_slow = null;
+		Node<E> mid_odd = null;
+
+		while (fast != null && fast.next != null) {
+			fast = fast.next.next;
+			prev_slow = slow;
+			slow = slow.next;
+		}
+
+		prev_slow.next = null;
+
+		if (fast != null) {
+			mid_odd = slow;
+			slow = slow.next;
+			mid_odd.next = null;
+		}
+
+		Node<E> rev_2nd_half = reverse(slow);
+		Node<E> first_half = this.head;
+		Node<E> tmp_rev = rev_2nd_half;
+		while (first_half != null && tmp_rev != null) {
+			if (first_half.data != tmp_rev.data) {
+				this.head = rebuild_list(this.head, mid_odd, rev_2nd_half);
+				return false;
+			}
+			first_half = first_half.next;
+			tmp_rev = tmp_rev.next;
+		}
+		this.head = rebuild_list(this.head, mid_odd, rev_2nd_half);
+		return true;
+	}
+
+	private Node<E> rebuild_list(Node<E> first_half, Node<E> mid_odd, Node<E> rev_second_half) {
+		Node<E> second_half = reverse(rev_second_half);
+		Node<E> tmp = first_half;
+
+		while (tmp.next != null) {
+			tmp = tmp.next;
+		}
+
+		if (mid_odd != null) {
+			tmp.next = mid_odd;
+			mid_odd.next = second_half;
+		} else {
+			tmp.next = second_half;
+		}
+		return first_half;
+	}
+
+	public Node<E> reverse(Node<E> tmp) {
+		Node<E> next = null;
+		Node<E> curr = tmp;
+		Node<E> prev = null;
+
+		while (curr != null) {
+			next = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = next;
+		}
+		tmp = prev;
+		return tmp;
+	}
+
+	public boolean is_palindrome_two_pointer_approach(Node<E> right) {
+		left = head;
+		if (right == null) {
+			return true;
+		}
+
+		boolean isp = is_palindrome_two_pointer_approach(right.next);
+		if (!isp)
+			return false;
+		boolean isp1 = (right.data == left.data);
+		left = left.next;
+		return isp1;
+	}
+
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		list.head = new Node<>(1);
 		list.head.next = new Node<>(2);
 		list.head.next.next = new Node<>(3);
-		list.traverse();
-		list.pushToStart(1);
-		list.insertAfter(2, 5);
-		list.insertAfter(6, 9);
-		Node<Integer> lastNode = list.appendLast(9);
-		list.traverse();
+		list.appendLast(3);
+		list.appendLast(2);
+		list.appendLast(1);
+		System.out.println(list.traverse());
+		// list.pushToStart(1);
+		// list.insertAfter(2, 5);
+		// list.insertAfter(6, 9);
+		// Node<Integer> lastNode = list.appendLast(1);
 		// testing cyclic list
 		// lastNode.next = list.head.next;
-		// list.traverse();
+		// System.out.println(list.traverse());;
 		// commenting below statements for better respective output results
 		// list.delete(1);
 		// list.delete(7);
 		// list.deleteAtPos(2);
 		// list.deleteAtPos(9);
-		// list.traverse();
+		// System.out.println(list.traverse());;
 		// System.out.println(list.size());
 		// System.out.println(list.size_via_recursive(list.head));
 		// System.out.println(list.search(2));
 		// System.out.println(list.search(8));
 		// System.out.println(list.search_via_recursion(8));
 		// System.out.println(list.search_via_recursion(2));
-		// list.traverse();
+		// System.out.println(list.traverse());;
 		// System.out.println(list.getNthNode(2));
 		// System.out.println(list.getNthNodeFrmLast(4));
 		// System.out.println(list.getNthNodeFrmLast2PtrApproach(2));
@@ -354,5 +465,12 @@ public class LinkedList<E> {
 		// System.out.println(list.detect_loop_using_hashing());
 		// System.out.println(list.detect_loop_fastest());
 		// System.out.println(list.detect_and_count_loop());
+		System.out.println(list.is_palindrome_two_pointer_approach(list.head));
+		System.out.println(list.traverse());
+	}
+
+	@Override
+	public String toString() {
+		return this.traverse();
 	}
 }
