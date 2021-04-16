@@ -426,14 +426,32 @@ public class LinkedList<E> {
 		return isp1;
 	}
 
+	public void remove_duplicates_frm_sortedList() {
+		if (this.head == null) {
+			System.out.println("List is empty!");
+		}
+
+		Node<E> curr = this.head;
+
+		while (curr != null) {
+			Node<E> temp = curr;
+
+			while (temp != null && temp.data == curr.data) {
+				temp = temp.next;
+			}
+			curr.next = temp;
+			curr = curr.next;
+		}
+	}
+
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		list.head = new Node<>(1);
 		list.head.next = new Node<>(2);
 		list.head.next.next = new Node<>(3);
 		list.appendLast(3);
-		list.appendLast(2);
-		list.appendLast(1);
+		list.appendLast(4);
+		list.appendLast(4);
 		System.out.println(list.traverse());
 		// list.pushToStart(1);
 		// list.insertAfter(2, 5);
@@ -465,8 +483,9 @@ public class LinkedList<E> {
 		// System.out.println(list.detect_loop_using_hashing());
 		// System.out.println(list.detect_loop_fastest());
 		// System.out.println(list.detect_and_count_loop());
-		System.out.println(list.is_palindrome_two_pointer_approach(list.head));
-		System.out.println(list.traverse());
+		// System.out.println(list.is_palindrome_two_pointer_approach(list.head));
+		// list.remove_duplicates_frm_sortedList();
+		// System.out.println(list.traverse());
 	}
 
 	@Override
