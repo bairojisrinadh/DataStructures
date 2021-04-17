@@ -444,14 +444,71 @@ public class LinkedList<E> {
 		}
 	}
 
+	public void remove_duplicates_frm_unsortedList() {
+		if (this.head == null) {
+			System.out.println("List is empty!");
+		}
+
+		Node<E> tmp = this.head;
+		Node<E> prev = null;
+		HashSet<E> hs = new HashSet<>();
+		while (tmp != null) {
+			if (hs.contains(tmp.data)) {
+				prev.next = tmp.next;
+			} else {
+				hs.add(tmp.data);
+				prev = tmp;
+			}
+			tmp = tmp.next;
+		}
+	}
+
+	public void swap_nodes(E x, E y) {
+		if (this.head == null)
+			System.out.println("List is Empty!");
+
+		Node<E> prevX = null, currX = this.head;
+		Node<E> prevY = null, currY = this.head;
+
+		while (currX != null && currX.data != x) {
+			prevX = currX;
+			currX = currX.next;
+		}
+
+		while (currY != null && currY.data != y) {
+			prevY = currY;
+			currY = currY.next;
+		}
+
+		if (currX == null || currY == null) {
+			System.out.println("Not found the node");
+			return;
+		}
+
+		if (prevX != null)
+			prevX.next = currY;
+		else
+			head = currY;
+
+		if (prevY != null)
+			prevY.next = currX;
+		else
+			head = currX;
+
+		// Swap next pointers
+		Node<E> tmp = currX.next;
+		currX.next = currY.next;
+		currY.next = tmp;
+	}
+
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		list.head = new Node<>(1);
 		list.head.next = new Node<>(2);
 		list.head.next.next = new Node<>(3);
-		list.appendLast(3);
 		list.appendLast(4);
-		list.appendLast(4);
+		list.appendLast(5);
+		list.appendLast(6);
 		System.out.println(list.traverse());
 		// list.pushToStart(1);
 		// list.insertAfter(2, 5);
@@ -486,6 +543,10 @@ public class LinkedList<E> {
 		// System.out.println(list.is_palindrome_two_pointer_approach(list.head));
 		// list.remove_duplicates_frm_sortedList();
 		// System.out.println(list.traverse());
+		// list.remove_duplicates_frm_unsortedList();
+		list.swap_nodes(2, 4);
+		System.out.println(list.traverse());
+
 	}
 
 	@Override
