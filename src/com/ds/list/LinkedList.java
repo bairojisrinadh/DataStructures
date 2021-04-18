@@ -5,7 +5,7 @@ import java.util.Stack;
 
 import com.ds.list.ref.Node;
 
-public class LinkedList<E> {
+public class LinkedList<E extends Number> {
 
 	Node<E> head;
 	Node<E> left;
@@ -101,11 +101,11 @@ public class LinkedList<E> {
 		return true;
 	}
 
-	public String traverse() {
-		if (this.head == null) {
+	public String traverse(Node<E> node_head) {
+		if (node_head == null) {
 			System.out.println("given linked list is empty");
 		}
-		Node<E> tmp = this.head;
+		Node<E> tmp = node_head;
 		StringBuilder sb = new StringBuilder();
 		final String arrow_sym = " -> ";
 		while (tmp != null) {
@@ -116,6 +116,10 @@ public class LinkedList<E> {
 			tmp = tmp.next;
 		}
 		return sb.toString();
+	}
+
+	public String traverse() {
+		return this.traverse(this.head);
 	}
 
 	public int size() {
@@ -501,6 +505,50 @@ public class LinkedList<E> {
 		currY.next = tmp;
 	}
 
+	public void move_last_node_to_first() {
+		if (this.head == null)
+			System.out.println("List is Empty!");
+		Node<E> last = this.head;
+		Node<E> prev_last = null;
+
+		while (last.next != null) {
+			prev_last = last;
+			last = last.next;
+		}
+
+		last.next = this.head;
+		prev_last.next = null;
+		this.head = last;
+	}
+
+	public Node<E> get_intersection_sorted_list(Node<E> head1, Node<E> head2) {
+		if (head1 == null || head2 == null)
+			System.out.println("Intersection not possible");
+
+		Node<E> dummy = null;
+		Node<E> tail = null;
+		while (head1 != null && head2 != null) {
+			if (head1.data == head2.data) {
+				Node<E> temp = new Node<E>(head1.data);
+				if (dummy == null) {
+					dummy = temp;
+					tail = temp;
+				} else {
+					tail.next = temp;
+					tail = temp;
+				}
+				head1 = head1.next;
+				head2 = head2.next;
+			} else if ((head1.data).intValue() < (head2.data).intValue()) {
+				head1 = head1.next;
+			} else {
+				head2 = head2.next;
+			}
+		}
+
+		return dummy;
+	}
+
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
 		list.head = new Node<>(1);
@@ -544,9 +592,16 @@ public class LinkedList<E> {
 		// list.remove_duplicates_frm_sortedList();
 		// System.out.println(list.traverse());
 		// list.remove_duplicates_frm_unsortedList();
-		list.swap_nodes(2, 4);
-		System.out.println(list.traverse());
-
+		// list.swap_nodes(2, 4);
+		// list.move_last_node_to_first();
+		// System.out.println(list.traverse());
+		// LinkedList<Integer> list2 = new LinkedList<Integer>();
+		// list2.head = new Node<>(1);
+		// list2.head.next = new Node<>(2);
+		// list2.head.next.next = new Node<>(4);
+		// list2.head.next.next.next = new Node<>(9);
+		// Node<Integer> intersection = list.get_intersection_sorted_list(list.head, list2.head);
+		// System.out.println(list.traverse(intersection));
 	}
 
 	@Override
