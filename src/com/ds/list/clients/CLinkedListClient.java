@@ -7,9 +7,10 @@ public class CLinkedListClient {
 	public static void main(String[] args) {
 		CLinkedList<Integer> list = new CLinkedList<>();
 		list.head = list.push(list.head, 12);
-		list.push(list.head, 56);
-		list.push(list.head, 2);
-		list.push(list.head, 11);
+		list.push(list.head, 13);
+		list.push(list.head, 15);
+		list.push(list.head, 16);
+		list.sortedPush(list.head, 14);
 		list.traverse();
 	}
 }

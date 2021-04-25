@@ -44,4 +44,33 @@ public class CLinkedList<E extends Number> {
 		head_ref = ptr1;
 		return head_ref;
 	}
+
+	public void sortedPush(Node<E> head_ref, E data) {
+		Node<E> new_node = new Node<>(data);
+		Node<E> current = head_ref;
+
+		//Case 1: If list is empty
+		if(current == null) {
+			new_node.next = new_node;
+			head_ref = new_node;
+			this.head = head_ref;
+		}
+		//Case 2: If new_node is less than head node alias first node
+		else if ((current.data).intValue() >= (new_node.data).intValue()) {
+			while(current.next != head_ref)
+				current = current.next;
+
+			current.next = new_node;
+			new_node.next = head_ref;
+			this.head = new_node;
+		}
+		//Case 3: Get the correct position of new_node and insert it
+		else {
+			while(current.next != head_ref && (current.next.data).intValue() < (new_node.data).intValue()) {
+				current = current.next;
+			}
+			new_node.next = current.next;
+			current.next = new_node;
+		}
+	}
 }
