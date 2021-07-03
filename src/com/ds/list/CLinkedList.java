@@ -73,4 +73,15 @@ public class CLinkedList<E extends Number> {
 			current.next = new_node;
 		}
 	}
+
+	public boolean checkLoopExists(Node<E> head_ref) {
+		if(head_ref == null) return true;
+		Node<E> tmp = head_ref.next;
+
+		while(tmp != null && tmp != head_ref) {
+			tmp = tmp.next;
+		}
+
+		return tmp == head_ref;
+	}
 }

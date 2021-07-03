@@ -12,5 +12,6 @@ public class CLinkedListClient {
 		list.push(list.head, 16);
 		list.sortedPush(list.head, 14);
 		list.traverse();
+		System.out.println(list.checkLoopExists(list.head));
 	}
 }
