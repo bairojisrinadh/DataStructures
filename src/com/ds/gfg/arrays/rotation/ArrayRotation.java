@@ -69,6 +69,28 @@ public class ArrayRotation {
         return input;
     }
 
+    public static int[] reversal_algorithm(int[] input, int d, int n) {
+        if (n == 0 || n == 1 || n == d) return input;
+
+        reverse(input, 0, d - 1);
+        reverse(input, d, n - 1);
+        reverse(input, 0, n - 1);
+
+        return input;
+    }
+
+    private static void reverse(int[] input, int l, int r) {
+        int tmp;
+        while (l < r) {
+            // swap elements at l & r
+            tmp = input[l];
+            input[l] = input[r];
+            input[r] = tmp;
+            l++;
+            r--;
+        }
+    }
+
     private static void left_rotate(int[] input, int n) {
         int tmp = input[0];
         for (int i = 1; i < n; i++) {
