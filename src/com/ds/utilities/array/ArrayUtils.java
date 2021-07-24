@@ -22,6 +22,10 @@ public final class ArrayUtils {
         return sb.toString();
     }
 
+    public static void print(int[] arr) {
+        System.out.println(getArrayAsString(arr));
+    }
+
     public static void swap(int[] arr, int left, int right) {
         int tmp = arr[left];
         arr[left] = arr[right];
